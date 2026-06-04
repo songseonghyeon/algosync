@@ -1,11 +1,41 @@
-HELP.md
-.gradle
+# =========================================================================
+# 1. 빌드 결과물 및 의존성 (Java & Gradle)
+# =========================================================================
+*.class
+*.jar
+*.war
+*.ear
+*.nar
+*.zip
+*.tar.gz
+*.rar
+bin/
 build/
+out/
+.gradle/
+
+# 빌드 결과물 중 예외적으로 Git에 올려야 하는 파일들 규칙
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
+!**/src/main/**/bin/
+!**/src/test/**/bin/
+!**/src/main/**/out/
+!**/src/test/**/out/
 
-### STS ###
+# =========================================================================
+# 2. 개발 도구 설정 파일 (IDE & Editor)
+# =========================================================================
+### IntelliJ IDEA ###
+.idea/
+*.iws
+*.iml
+*.ipr
+
+### VS Code ###
+.vscode/
+
+### STS (Spring Tool Suite) ###
 .apt_generated
 .classpath
 .factorypath
@@ -13,18 +43,6 @@ build/
 .settings
 .springBeans
 .sts4-cache
-bin/
-!**/src/main/**/bin/
-!**/src/test/**/bin/
-
-### IntelliJ IDEA ###
-.idea
-*.iws
-*.iml
-*.ipr
-out/
-!**/src/main/**/out/
-!**/src/test/**/out/
 
 ### NetBeans ###
 /nbproject/private/
@@ -33,5 +51,14 @@ out/
 /nbdist/
 /.nb-gradle/
 
-### VS Code ###
-.vscode/
+# =========================================================================
+# 3. 기타 시스템 및 로그 파일
+# =========================================================================
+HELP.md
+*.log
+*.ctxt
+.mtj.tmp/
+hs_err_pid*
+replay_pid*
+.DS_Store
+Thumbs.db

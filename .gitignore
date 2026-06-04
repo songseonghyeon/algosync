@@ -1,5 +1,11 @@
-# Compiled class file
+### Java & Gradle ###
 *.class
+*.jar
+*.war
+*.ear
+bin/
+.gradle/                # Gradle 캐시 폴더
+build/                  # Gradle 빌드 결과물
 
 # Log file
 *.log

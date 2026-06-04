@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  algosync-db:
+    image: postgres:15-alpine
+    container_name: algosync-postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: algosync
+      POSTGRES_PASSWORD: dkfrhflwma!
+      POSTGRES_DB: algosync
+    volumes:
+      # 내 컴퓨터 프로젝트 폴더 안에 db-data라는 이름으로 실제 DB 데이터가 저장됩니다.
+      - ./db-data:/var/lib/postgresql/data
+    restart: always

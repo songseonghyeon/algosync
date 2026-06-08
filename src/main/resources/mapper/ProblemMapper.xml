@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.algosync.backend.domain.problem.ProblemRepository">
+    <insert id="insertProblen">
+        insert into problems (id, title, level, category)
+        values (#{id}, #{title}, #{level}, #{category})
+    </insert>
+</mapper>

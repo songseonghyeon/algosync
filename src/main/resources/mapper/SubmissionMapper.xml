@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.algosync.backend.domain.submission.SubmissionRepository">
+    <insert id="insertSubmission" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO submissions (
+        user_id,
+        problem_id,
+        language,
+        code,
+        solve_time,
+        is_success,
+        created_at
+        ) VALUES (
+        #{userId},
+        #{problemId},
+        #{language},
+        #{code},
+        #{solveTime},
+        #{isSuccess},
+        NOW()
+        )
+    </insert>
+
+    <select id="selectSubmission">
+        select * from submissions where problem_id = #{problemId}
+    </select>
+
+    <select id="selectUserId">
+        select id from users where email = #{email}
+    </select>
+</mapper>

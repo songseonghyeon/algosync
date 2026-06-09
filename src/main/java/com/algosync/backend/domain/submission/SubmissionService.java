@@ -3,6 +3,7 @@ package com.algosync.backend.domain.submission;
 import org.springframework.stereotype.Service;
 
 import com.algosync.backend.domain.problem.ProblemRepository;
+import com.algosync.backend.domain.problem.dto.ProblemDto;
 import com.algosync.backend.domain.submission.dto.SubmissionDto;
 
 import lombok.RequiredArgsConstructor;
@@ -17,7 +18,15 @@ public class SubmissionService {
 		Long userId = selectUserId(dto.getUserEmail());
 		dto.setUserId(userId);
 		dto.setLanguage("JAVA");
-		problemRepo.insertProblem(dto);
+		System.out.println(dto);
+
+		ProblemDto proDto = new ProblemDto();
+		proDto.setId(dto.getProblemId());
+		proDto.setTitle(dto.getProblemTitle());
+		proDto.setLevel(dto.getLevel());
+		proDto.setCategory(dto.getCategory());
+
+		problemRepo.insertProblem(proDto);
 		subRepo.insertSubmission(dto);
 	}
 

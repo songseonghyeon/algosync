@@ -14,6 +14,7 @@ bin/
 build/
 out/
 .gradle/
+./db-data/*
 
 # 빌드 결과물 중 예외적으로 Git에 올려야 하는 파일들 규칙
 !gradle/wrapper/gradle-wrapper.jar

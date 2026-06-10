@@ -1,5 +1,6 @@
 package com.algosync.backend.domain.submission;
 
+import com.algosync.backend.domain.review.GeminiService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;

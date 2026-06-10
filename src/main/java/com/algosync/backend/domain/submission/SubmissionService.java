@@ -1,5 +1,6 @@
 package com.algosync.backend.domain.submission;
 
+import com.algosync.backend.domain.review.GeminiService;
 import org.springframework.stereotype.Service;
 
 import com.algosync.backend.domain.problem.ProblemRepository;
@@ -13,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 public class SubmissionService {
 	private final SubmissionRepository subRepo;
 	private final ProblemRepository problemRepo;
+	private final GeminiService gemService;
 
 	public void insertSubmission(SubmissionDto dto) {
 		Long userId = selectUserId(dto.getUserEmail());
@@ -28,6 +30,8 @@ public class SubmissionService {
 
 		problemRepo.insertProblem(proDto);
 		subRepo.insertSubmission(dto);
+
+		gemService.requestGem(dto);
 	}
 
 	public Long selectUserId(String userEmail) {

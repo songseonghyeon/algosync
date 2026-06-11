@@ -3,6 +3,10 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.algosync.backend.domain.problem.ProblemRepository">
+    <select id="selectTitle" >
+        select title from problems where id = #{problemId}
+    </select>
+
     <insert id="insertProblem">
         insert into problems (id, title, level, category)
         values (#{id}, #{title}, #{level}, #{category})

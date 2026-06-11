@@ -1,6 +1,8 @@
 package com.algosync.backend.domain.submission;
 
 import com.algosync.backend.domain.review.GeminiService;
+import com.algosync.backend.domain.review.dto.GeminiResponseDto;
+import com.algosync.backend.domain.review.dto.ReviewResponseDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,9 +24,12 @@ public class SubmissionController {
 	private final SubmissionService subService;
 
 	@PostMapping("/save")
-	public ResponseEntity<String> insertSubmission(@RequestBody SubmissionDto submission) {
+	public ResponseEntity<ReviewResponseDto> insertSubmission(@RequestBody SubmissionDto submission) {
 		System.out.println(submission);
-		subService.insertSubmission(submission);
-		return ResponseEntity.ok("입력 완료");
+		ReviewResponseDto result = subService.insertSubmission(submission);
+		if(result != null) {
+			return ResponseEntity.ok(result);
+		}
+		return null;
 	}
 }

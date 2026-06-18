@@ -30,4 +30,8 @@
     <select id="selectUserId">
         select id from users where email = #{email}
     </select>
+
+    <select id="selectMyCode">
+        select code from submissions where user_id = #{userId} and problem_id = #{problemId}
+    </select>
 </mapper>

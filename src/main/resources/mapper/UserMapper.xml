@@ -8,4 +8,12 @@
     <select id="selectUser">
         select * from users
     </select>
+
+    <select id="selectOneUser">
+        select * from users where user_id = #{id}
+    </select>
+
+    <insert id="insertUserId">
+        insert into users (user_id) values (#{userId})
+    </insert>
 </mapper>

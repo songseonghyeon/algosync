@@ -24,7 +24,6 @@ public class SubmissionDto {
 	private LocalDateTime createdAt;
 
 	// 크롬 확장 프로그램에서 요청을 받을 때 매핑하기 위한 필드들
-	private String userEmail;   // 이메일로 유저를 식별하기 위함
 	private String problemTitle;// 문제 제목
 	private Integer level;      // 문제 난이도
 	private String category;    // 알고리즘 유형

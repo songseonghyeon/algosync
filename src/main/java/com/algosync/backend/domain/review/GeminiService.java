@@ -4,12 +4,14 @@ import com.algosync.backend.domain.review.dto.GeminiRequestDto;
 import com.algosync.backend.domain.review.dto.GeminiResponseDto;
 import com.algosync.backend.domain.review.dto.ReviewResponseDto;
 import com.algosync.backend.domain.submission.dto.SubmissionDto;
+import com.algosync.backend.global.exception.ExternalApiException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
+import org.springframework.web.client.RestClientResponseException;
 import tools.jackson.databind.ObjectMapper;
 
 @Slf4j
@@ -46,15 +48,24 @@ public class GeminiService {
                     .retrieve()
                     .body(GeminiResponseDto.class);
 
-            if(response != null && !response.getCandidates().isEmpty()) {
-                log.info("제미나이에게 응답을 받았습니다.");
-                String text = response.getCandidates().get(0).getContent().getParts().get(0).getText();
-                return objectMapper.readValue(text, ReviewResponseDto.class);
+            if(response == null || response.getCandidates() == null || response.getCandidates().isEmpty()) {
+                throw ExternalApiException.geminiEmptyResponse();
             }
+
+            String text = response.getCandidates().get(0).getContent().getParts().get(0).getText();
+            return objectMapper.readValue(text, ReviewResponseDto.class);
+        } catch(ExternalApiException e) {
+            throw e;
+        } catch(RestClientResponseException e) {
+            log.error("Gemini API가 오류 응답을 반환했습니다.", e);
+            if(e.getStatusCode().value() == 503) {
+                throw ExternalApiException.geminiServiceUnavailable(e);
+            }
+            throw ExternalApiException.geminiReviewFailed(e);
         } catch(Exception e) {
-            log.error("AI 리뷰 중 오류가 발생했습니다.", e);
+            log.error("AI 리뷰 생성에 실패했습니다.", e);
+            throw ExternalApiException.geminiReviewFailed(e);
         }
-        return null;
     }
 
     private String createBasicReviewPrompt(SubmissionDto dto) {

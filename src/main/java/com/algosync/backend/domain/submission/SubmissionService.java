@@ -56,9 +56,6 @@ public class SubmissionService {
         return subRepo.selectUserId(userEmail);
     }
 
-    public void insertUserId(Long userId) {
-    }
-
     private String prepareSubmission(SubmissionDto dto) {
         if (dto.getUserId() != null) {
             UserDto userDto = userService.selectOneUser(dto.getUserId());
@@ -78,6 +75,7 @@ public class SubmissionService {
         problemDto.setTitle(dto.getProblemTitle());
         problemDto.setLevel(dto.getLevel());
         problemDto.setCategory(dto.getCategory());
+        problemDto.setId(dto.getProblemId());
 
         String existingTitle = problemRepo.selectTitle(problemDto.getId());
         if (existingTitle == null) {

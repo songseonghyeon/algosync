@@ -34,4 +34,13 @@
     <select id="selectMyCode">
         select code from submissions where user_id = #{userId} and problem_id = #{problemId}
     </select>
+
+    <select id="getPrevCode" resultType="string">
+        SELECT code
+        FROM submissions
+        WHERE user_id = #{userId}
+        AND problem_id = #{problemId}
+        ORDER BY created_at DESC
+        LIMIT 1
+    </select>
 </mapper>

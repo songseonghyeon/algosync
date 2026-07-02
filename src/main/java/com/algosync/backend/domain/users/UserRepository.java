@@ -9,4 +9,6 @@ import com.algosync.backend.domain.users.dto.UserDto;
 @Mapper
 public interface UserRepository {
 	List<UserDto> selectUser();
+	UserDto selectOneUser(Long userId);
+	void insertUserId(Long userId);
 }

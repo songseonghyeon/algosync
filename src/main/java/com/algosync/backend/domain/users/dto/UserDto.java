@@ -1,6 +1,6 @@
 package com.algosync.backend.domain.users.dto;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,5 +17,5 @@ public class UserDto {
 	private Long id;
 	private String email;
 	private String name;
-	private LocalDateTime createdAt;
+	private OffsetDateTime createdAt;
 }

@@ -2,11 +2,10 @@ package com.algosync.backend;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-import com.algosync.backend.domain.users.UserController;
-import com.algosync.backend.domain.users.UserRepository;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 @SpringBootApplication
+@EnableAsync
 public class AlgosyncApplication {
 
 	public static void main(String[] args) {

@@ -12,7 +12,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 public class ProblemDto {
-	private long id;
+	private long problemId;
 	private String title;
 	private int level;
 	private String category;

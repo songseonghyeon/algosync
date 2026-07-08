@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.algosync.backend.domain.submission.SubmissionRepository">
-    <insert id="insertSubmission" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insertSubmission" useGeneratedKeys="true" keyProperty="submissionId">
         INSERT INTO submissions (
         user_id,
         problem_id,
@@ -25,10 +25,6 @@
 
     <select id="selectSubmission">
         select * from submissions where problem_id = #{problemId}
-    </select>
-
-    <select id="selectUserId">
-        select id from users where email = #{email}
     </select>
 
     <select id="selectMyCode">

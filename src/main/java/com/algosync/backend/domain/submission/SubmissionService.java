@@ -39,8 +39,8 @@ public class SubmissionService {
         String prevCode = prepareSubmission(dto);
         subRepo.insertSubmission(dto);
 
-        ReviewJobResponseDto pending = reviewAsyncService.createPendingJob(dto.getId());
-        reviewAsyncService.requestReviewAsync(pending.getReviewToken(), dto.getId(), dto, prevCode);
+        ReviewJobResponseDto pending = reviewAsyncService.createPendingJob(dto.getSubmissionId());
+        reviewAsyncService.requestReviewAsync(pending.getReviewToken(), dto.getSubmissionId(), dto, prevCode);
         return pending;
     }
 
@@ -52,10 +52,6 @@ public class SubmissionService {
         return reviewJob;
     }
 
-    public Long selectUserId(String userEmail) {
-        return subRepo.selectUserId(userEmail);
-    }
-
     private String prepareSubmission(SubmissionDto dto) {
         if (dto.getUserId() != null) {
             UserDto userDto = userService.selectOneUser(dto.getUserId());
@@ -63,7 +59,6 @@ public class SubmissionService {
                 userService.insertUserId(dto.getUserId());
             }
         }
-        dto.setLanguage("JAVA");
 
         String prevCode = null;
         if (dto.getUserId() != null && dto.getProblemId() != null) {
@@ -71,15 +66,15 @@ public class SubmissionService {
         }
 
         ProblemDto problemDto = new ProblemDto();
-        problemDto.setId(dto.getProblemId());
+        problemDto.setProblemId(dto.getProblemId());
         problemDto.setTitle(dto.getProblemTitle());
         problemDto.setLevel(dto.getLevel());
         problemDto.setCategory(dto.getCategory());
-        problemDto.setId(dto.getProblemId());
+        problemDto.setProblemId(dto.getProblemId());
 
-        String existingTitle = problemRepo.selectTitle(problemDto.getId());
+        String existingTitle = problemRepo.selectTitle(problemDto.getProblemId());
         if (existingTitle == null) {
-            log.info("DB에서 문제를 찾을 수 없습니다. Insert problem metadata. problemId={}", problemDto.getId());
+            log.info("DB에서 문제를 찾을 수 없습니다. Insert problem metadata. problemId={}", problemDto.getProblemId());
             problemRepo.insertProblem(problemDto);
         }
 

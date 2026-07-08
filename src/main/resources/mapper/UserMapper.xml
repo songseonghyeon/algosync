@@ -10,7 +10,7 @@
     </select>
 
     <select id="selectOneUser">
-        select * from users where user_id = #{id}
+        select * from users where user_id = #{userId}
     </select>
 
     <insert id="insertUserId">

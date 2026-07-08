@@ -14,7 +14,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SubmissionDto {
-	private Long id;
+	private Long submissionId;
 	private Long userId;        // 어떤 유저가 풀었는지
 	private Long problemId;     // 어떤 문제를 풀었는지
 	private String language;    // 제출 언어 (Java 등)

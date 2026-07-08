@@ -8,8 +8,8 @@ import org.springframework.stereotype.Service;
 public class ProblemService {
     private final ProblemRepository problemRepository;
 
-    public String selectTitle(Long id) {
-        String result = problemRepository.selectTitle(id);
+    public String selectTitle(Long problemId) {
+        String result = problemRepository.selectTitle(problemId);
         return result;
     }
 }

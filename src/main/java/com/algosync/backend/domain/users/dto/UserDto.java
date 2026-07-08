@@ -14,7 +14,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserDto {
-	private Long id;
+	private Long userId;
 	private String email;
 	private String name;
 	private OffsetDateTime createdAt;

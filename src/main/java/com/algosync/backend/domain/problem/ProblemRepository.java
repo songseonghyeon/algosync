@@ -7,6 +7,6 @@ import com.algosync.backend.domain.submission.dto.SubmissionDto;
 
 @Mapper
 public interface ProblemRepository {
-	String selectTitle(Long id);
+	String selectTitle(Long problemId);
 	void insertProblem(ProblemDto dto);
 }

@@ -9,7 +9,7 @@
 *.zip
 *.tar.gz
 *.rar
-*.properties
+src/main/resources/config/*
 bin/
 build/
 out/

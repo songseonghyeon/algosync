@@ -16,7 +16,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Service
 @RequiredArgsConstructor
 public class ReviewAsyncService {
-    private final GeminiService geminiService;
+    private final ReviewService reviewService;
 
     // 제출 단위 토큰으로 상태를 들고 있어야 동일 문제의 다른 제출과 섞이지 않습니다.
     private final Map<String, ReviewJobResponseDto> reviewsByToken = new ConcurrentHashMap<>();
@@ -31,7 +31,7 @@ public class ReviewAsyncService {
     @Async
     public void requestReviewAsync(String reviewToken, Long submissionId, SubmissionDto dto, String prevCode) {
         try {
-            ReviewResponseDto review = geminiService.requestGem(dto, prevCode);
+            ReviewResponseDto review = reviewService.requestReview(dto, prevCode);
             if (review == null) {
                 reviewsByToken.put(reviewToken, ReviewJobResponseDto.failed(submissionId, reviewToken));
                 return;

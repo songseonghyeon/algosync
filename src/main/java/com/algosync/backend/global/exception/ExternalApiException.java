@@ -46,4 +46,12 @@ public class ExternalApiException extends RuntimeException {
                 cause
         );
     }
+    public static ExternalApiException nvidiaReviewFailed(Throwable cause) {
+        return new ExternalApiException(
+                HttpStatus.BAD_GATEWAY,
+                "NVIDIA_REVIEW_FAILED",
+                "NVIDIA AI 리뷰 생성에 실패했습니다.",
+                cause
+        );
+    }
 }

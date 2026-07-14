@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.algosync.backend.domain.review.ReviewRepository">
+    <insert id="insertReview">
+        INSERT INTO ai_reviews (
+            submission_id,
+            time_complexity,
+            space_complexity,
+            feedback,
+            score
+        ) VALUES (
+            #{submissionId},
+            #{review.timeComplexity},
+            #{review.spaceComplexity},
+            #{review.feedback},
+            CAST(#{review.score} AS integer)
+        )
+    </insert>
+
+</mapper>

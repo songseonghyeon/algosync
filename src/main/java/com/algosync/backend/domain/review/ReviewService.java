@@ -13,17 +13,22 @@ import org.springframework.stereotype.Service;
 public class ReviewService {
     private final GeminiService geminiService;
     private final NvidiaService nvidiaService;
+    private final ReviewRepository reviewRepository;
 
-    public ReviewResponseDto requestReview(SubmissionDto dto, String prevCode) {
+    public ReviewResponseDto requestReview(Long submissionId, SubmissionDto dto, String prevCode) {
         try {
-            return geminiService.requestReview(dto, prevCode);
+            ReviewResponseDto review = geminiService.requestReview(dto, prevCode);
+            reviewRepository.insertReview(submissionId, review);
+            return review;
         } catch (ExternalApiException e) {
             if (!"GEMINI_SERVICE_UNAVAILABLE".equals(e.getCode())) {
                 throw e;
             }
 
             log.warn("Gemini unavailable. Falling back to NVIDIA.");
-            return nvidiaService.requestReview(dto, prevCode);
+            ReviewResponseDto review = nvidiaService.requestReview(dto, prevCode);
+            reviewRepository.insertReview(submissionId, review);
+            return review;
         }
     }
 }

@@ -28,7 +28,7 @@ public class SubmissionService {
     public ReviewResponseDto insertSubmission(SubmissionDto dto) {
         String prevCode = prepareSubmission(dto);
         subRepo.insertSubmission(dto);
-        ReviewResponseDto review = reviewService.requestReview(dto, prevCode);
+        ReviewResponseDto review = reviewService.requestReview(dto.getSubmissionId(), dto, prevCode);
         if (review == null) {
             throw new SubmissionProcessingException("AI 리뷰 생성에 실패했습니다.");
         }

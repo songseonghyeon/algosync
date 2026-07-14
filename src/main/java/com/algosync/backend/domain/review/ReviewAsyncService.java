@@ -31,7 +31,7 @@ public class ReviewAsyncService {
     @Async
     public void requestReviewAsync(String reviewToken, Long submissionId, SubmissionDto dto, String prevCode) {
         try {
-            ReviewResponseDto review = reviewService.requestReview(dto, prevCode);
+            ReviewResponseDto review = reviewService.requestReview(submissionId, dto, prevCode);
             if (review == null) {
                 reviewsByToken.put(reviewToken, ReviewJobResponseDto.failed(submissionId, reviewToken));
                 return;

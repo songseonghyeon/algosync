@@ -4,8 +4,8 @@ import com.algosync.backend.common.exception.ReviewJobNotFoundException;
 import com.algosync.backend.common.exception.SubmissionProcessingException;
 import com.algosync.backend.domain.problem.ProblemRepository;
 import com.algosync.backend.domain.problem.dto.ProblemDto;
-import com.algosync.backend.domain.review.GeminiService;
 import com.algosync.backend.domain.review.ReviewAsyncService;
+import com.algosync.backend.domain.review.ReviewService;
 import com.algosync.backend.domain.review.dto.ReviewJobResponseDto;
 import com.algosync.backend.domain.review.dto.ReviewResponseDto;
 import com.algosync.backend.domain.submission.dto.SubmissionDto;
@@ -21,14 +21,14 @@ import org.springframework.stereotype.Service;
 public class SubmissionService {
     private final SubmissionRepository subRepo;
     private final ProblemRepository problemRepo;
-    private final GeminiService gemService;
+    private final ReviewService reviewService;
     private final ReviewAsyncService reviewAsyncService;
     private final UserService userService;
 
     public ReviewResponseDto insertSubmission(SubmissionDto dto) {
         String prevCode = prepareSubmission(dto);
         subRepo.insertSubmission(dto);
-        ReviewResponseDto review = gemService.requestGem(dto, prevCode);
+        ReviewResponseDto review = reviewService.requestReview(dto, prevCode);
         if (review == null) {
             throw new SubmissionProcessingException("AI 리뷰 생성에 실패했습니다.");
         }

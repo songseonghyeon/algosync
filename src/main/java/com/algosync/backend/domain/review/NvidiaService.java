@@ -4,7 +4,7 @@ import com.algosync.backend.domain.review.dto.ReviewResponseDto;
 import com.algosync.backend.domain.submission.dto.SubmissionDto;
 import com.algosync.backend.global.exception.ExternalApiException;
 import dev.langchain4j.model.chat.ChatModel;
-import dev.langchain4j.model.googleai.GoogleAiGeminiChatModel;
+import dev.langchain4j.model.openai.OpenAiChatModel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,47 +14,46 @@ import tools.jackson.databind.ObjectMapper;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class GeminiService {
+public class NvidiaService {
     private final ObjectMapper objectMapper;
     private final ReviewPromptFactory reviewPromptFactory;
 
-    @Value("${gemini.api.key}")
+    @Value("${nvidia.api.key}")
     private String apiKey;
 
-    @Value("${gemini.api.model}")
+    @Value("${nvidia.api.model}")
     private String modelName;
+
+    @Value("${nvidia.api.url}")
+    private String baseUrl;
 
     public ReviewResponseDto requestReview(SubmissionDto dto, String prevCode) {
         try {
             String response = buildModel().chat(reviewPromptFactory.createPrompt(dto, prevCode));
             return objectMapper.readValue(response, ReviewResponseDto.class);
-        } catch (ExternalApiException e) {
-            throw e;
         } catch (Exception e) {
-            log.error("Gemini review request failed", e);
-            if (isServiceUnavailable(e)) {
-                throw ExternalApiException.geminiServiceUnavailable(e);
-            }
-            throw ExternalApiException.geminiReviewFailed(e);
+            log.error("NVIDIA review request failed", e);
+            throw ExternalApiException.nvidiaReviewFailed(e);
         }
     }
 
     private ChatModel buildModel() {
-        return GoogleAiGeminiChatModel.builder()
-                .apiKey(apiKey)
-                .modelName(modelName)
+        return OpenAiChatModel.builder()
+                .apiKey(normalize(apiKey))
+                .baseUrl(normalize(baseUrl))
+                .modelName(normalize(modelName))
                 .build();
     }
 
-    private boolean isServiceUnavailable(Throwable throwable) {
-        Throwable current = throwable;
-        while (current != null) {
-            String message = current.getMessage();
-            if (message != null && message.contains("503")) {
-                return true;
-            }
-            current = current.getCause();
+    private String normalize(String value) {
+        if (value == null) {
+            return "";
         }
-        return false;
+
+        String trimmed = value.trim();
+        if (trimmed.length() >= 2 && trimmed.startsWith("\"") && trimmed.endsWith("\"")) {
+            return trimmed.substring(1, trimmed.length() - 1).trim();
+        }
+        return trimmed;
     }
 }

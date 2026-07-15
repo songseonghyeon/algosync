@@ -13,7 +13,7 @@
 ---
 
 ## 🌟 프로젝트 소개
-**알봇(AlgoSync)**은 프로그래머스(Programmers) 플랫폼에서 알고리즘 문제를 풀이하는 개발자들의 효율적인 학습을 돕기 위해 개발된 **크롬 익스텐션 & 백엔드 분석 서버 시스템**입니다. 
+알봇(AlgoSync)은 프로그래머스(Programmers) 플랫폼에서 알고리즘 문제를 풀이하는 개발자들의 효율적인 학습을 돕기 위해 개발된 **크롬 익스텐션 & 백엔드 분석 서버 시스템**입니다. 
 
 작성 중인 소스코드를 크롬 익스텐션이 안전하게 추출하여 백엔드로 전송하면, AI 분석 엔진이 코드의 **시간/공간 복잡도 분석** 및 **구체적인 리팩토링 방향성**을 제시하여 실시간 피드백을 제공합니다.
 
@@ -68,15 +68,18 @@
 │   ├── manifest.json    # Extension 설정 파일 (권한 및 주입 규칙 정의)
 │   ├── popup.html       # 알봇 도우미 팝업 UI Layout
 │   ├── popup.js         # 사용자 이벤트 제어
-│   └── inject.js        # 프로그래머스 문제 영역 DOM 파서
-|   └── icons/           # 확장 프로그램 아이콘
-|       ├── png
-│
+│   ├── inject.js        # 프로그래머스 문제 영역 DOM 파서
+│   └── icons/           # 확장 프로그램 아이콘
+│       └── png
 └── server-backend/      # Spring Boot 백엔드 서버 시스템
-├── src/
-│   ├── main/java/.../controller/  # 분석 요청 API 컨트롤러
-│   ├── main/java/.../dto/         # 이기종 LLM 바인딩을 위한 공통 DTO
-│   ├── main/java/.../service/     # LangChain4j 연동 및 Failover 비즈니스 로직
-│   └── main/resources/application.yml
-└── pom.xml
+    ├── src/
+    │   ├── main/java/.../controller/  # 분석 요청 API 컨트롤러
+    │   ├── main/java/.../dto/         # 이기종 LLM 바인딩을 위한 공통 DTO
+    │   ├── main/java/.../mapper/      # DB 매핑을 위한 MyBatis Mapper 인터페이스
+    │   ├── main/java/.../service/     # LangChain4j 연동 및 Failover 비즈니스 로직
+    │   └── main/resources/
+    │       ├── mapper/                # SQL 쿼리가 작성된 MyBatis XML 폴더
+    │       │   └── *.xml              # 분석 이력 저장 및 조회용 mapper.xml 파일들
+    │       └── application.yml        # DB 연결 및 MyBatis 경로 설정 파일
+    └── build.gradle
 ```

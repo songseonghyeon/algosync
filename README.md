@@ -66,9 +66,11 @@
 ```text
 ├── ext-client/          # Chrome Extension (Manifest V3 Client)
 │   ├── manifest.json    # Extension 설정 파일 (권한 및 주입 규칙 정의)
+│   ├── content.js       # 정답 팝업 확인 후 background.js에 전
 │   ├── popup.html       # 알봇 도우미 팝업 UI Layout
 │   ├── popup.js         # 사용자 이벤트 제어
 │   ├── inject.js        # 프로그래머스 문제 영역 DOM 파서
+│   ├── background.js    # AI api 동작
 │   └── icons/           # 확장 프로그램 아이콘
 │       └── png
 └── server-backend/      # Spring Boot 백엔드 서버 시스템

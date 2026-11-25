@@ -4,6 +4,9 @@ import lombok.Getter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 
+/**
+ * 외부 AI API 오류를 HTTP 상태와 서비스 오류 코드로 표현합니다.
+ */
 @Getter
 public class ExternalApiException extends RuntimeException {
     private final String code;

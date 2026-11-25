@@ -15,6 +15,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+/**
+ * 제출에 필요한 데이터를 준비하고 저장한 뒤 AI 리뷰를 요청합니다.
+ */
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -25,6 +28,7 @@ public class SubmissionService {
     private final ReviewAsyncService reviewAsyncService;
     private final UserService userService;
 
+    // 제출을 저장하고 AI 리뷰가 완료될 때까지 요청을 처리합니다.
     public ReviewResponseDto insertSubmission(SubmissionDto dto) {
         String prevCode = prepareSubmission(dto);
         subRepo.insertSubmission(dto);
@@ -35,6 +39,7 @@ public class SubmissionService {
         return review;
     }
 
+    // 제출을 저장한 뒤 백그라운드 리뷰를 시작하고 조회 토큰을 반환합니다.
     public ReviewJobResponseDto insertSubmissionAsync(SubmissionDto dto) {
         String prevCode = prepareSubmission(dto);
         subRepo.insertSubmission(dto);
@@ -44,6 +49,7 @@ public class SubmissionService {
         return pending;
     }
 
+    // 발급된 토큰으로 리뷰 상태를 조회하고, 토큰이 없으면 예외를 발생시킵니다.
     public ReviewJobResponseDto getReview(String reviewToken) {
         ReviewJobResponseDto reviewJob = reviewAsyncService.getReview(reviewToken);
         if (reviewJob == null) {
@@ -52,6 +58,7 @@ public class SubmissionService {
         return reviewJob;
     }
 
+    // 미등록 사용자와 문제를 저장하고 비교에 사용할 이전 코드를 찾습니다.
     private String prepareSubmission(SubmissionDto dto) {
         if (dto.getUserId() != null) {
             UserDto userDto = userService.selectOneUser(dto.getUserId());
@@ -60,6 +67,7 @@ public class SubmissionService {
             }
         }
 
+        // 새 제출을 저장하기 전에 조회해야 이전 제출 코드를 가져올 수 있습니다.
         String prevCode = null;
         if (dto.getUserId() != null && dto.getProblemId() != null) {
             prevCode = subRepo.getPrevCode(dto.getUserId(), dto.getProblemId());

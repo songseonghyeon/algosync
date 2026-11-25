@@ -3,6 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.algosync.backend.domain.review.ReviewRepository">
+    <!-- 제출 ID에 연결해 리뷰를 저장하고 점수를 정수로 변환합니다. -->
     <insert id="insertReview">
         INSERT INTO ai_reviews (
             submission_id,

@@ -11,6 +11,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import tools.jackson.databind.ObjectMapper;
 
+/**
+ * OpenAI 호환 NVIDIA API에 코드 리뷰를 요청하고 응답을 변환합니다.
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -37,6 +40,7 @@ public class NvidiaService {
         }
     }
 
+    // 외부 설정의 API 키, 주소, 모델 이름으로 NVIDIA 클라이언트를 구성합니다.
     private ChatModel buildModel() {
         return OpenAiChatModel.builder()
                 .apiKey(normalize(apiKey))
@@ -45,6 +49,7 @@ public class NvidiaService {
                 .build();
     }
 
+    // 설정값에 포함된 바깥쪽 큰따옴표와 공백을 제거합니다.
     private String normalize(String value) {
         if (value == null) {
             return "";

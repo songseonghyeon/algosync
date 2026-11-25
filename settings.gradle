@@ -1,1 +1,2 @@
+// Gradle이 루트 프로젝트와 빌드 결과물의 이름에 사용하는 값입니다.
 rootProject.name = 'algosync'

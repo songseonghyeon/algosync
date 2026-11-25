@@ -8,9 +8,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+/**
+ * 컨트롤러에서 발생한 알려진 예외를 공통 형식의 HTTP 오류 응답으로 변환합니다.
+ */
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    // 외부 API 오류에 지정된 HTTP 상태와 오류 코드를 사용합니다.
     @ExceptionHandler(ExternalApiException.class)
     public ResponseEntity<ErrorResponseDto> handleExternalApiException(ExternalApiException e) {
         return ResponseEntity

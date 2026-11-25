@@ -5,6 +5,9 @@ import lombok.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Gemini 메시지의 본문을 여러 파트로 표현합니다.
+ */
 @Getter
 @Setter
 @NoArgsConstructor

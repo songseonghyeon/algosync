@@ -6,6 +6,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+/**
+ * 문제 ID, 제목, 난이도, 분류를 전달합니다.
+ */
 @Getter
 @Setter
 @NoArgsConstructor

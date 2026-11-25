@@ -5,14 +5,17 @@
 
 <mapper
         namespace="com.algosync.backend.domain.users.UserRepository">
+    <!-- 등록된 사용자 전체를 조회합니다. -->
     <select id="selectUser">
         select * from users
     </select>
 
+    <!-- 사용자 ID로 등록 정보를 조회합니다. -->
     <select id="selectOneUser">
         select * from users where user_id = #{userId}
     </select>
 
+    <!-- 새 사용자 ID를 저장합니다. -->
     <insert id="insertUserId">
         insert into users (user_id) values (#{userId})
     </insert>

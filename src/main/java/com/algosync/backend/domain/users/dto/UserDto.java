@@ -8,6 +8,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+/**
+ * 사용자 데이터를 전달하는 객체입니다.
+ */
 @Getter
 @Setter
 @ToString

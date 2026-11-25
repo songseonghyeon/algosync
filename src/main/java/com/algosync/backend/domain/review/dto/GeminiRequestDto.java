@@ -5,6 +5,9 @@ import lombok.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Gemini 요청에 전달할 메시지 목록을 담습니다.
+ */
 @Getter
 @Setter
 @NoArgsConstructor

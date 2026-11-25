@@ -8,6 +8,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+/**
+ * 제출 코드와 사용자, 문제, 풀이 정보를 함께 전달합니다.
+ */
 @Getter
 @Setter
 @ToString

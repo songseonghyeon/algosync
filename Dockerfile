@@ -6,6 +6,8 @@ RUN apk add --no-cache openjdk21-jre
 
 # 3. 컨테이너 내부에서 작업할 기본 디렉토리를 생성하고 이동합니다.
 WORKDIR /app
+# 배포 이미지에서 운영 프로필을 활성화해 /app/.config의 설정을 읽습니다.
+ENV SPRING_PROFILES_ACTIVE=prod
 
 # 4. Gradle 빌드로 생성된 진짜 jar 파일 실물을 컨테이너 내부로 복사합니다.
 # 💡 AlgoSync 프로젝트 빌드 시 생성되는 jar 파일 매칭

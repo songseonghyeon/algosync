@@ -5,6 +5,9 @@ import lombok.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Gemini 응답에 포함된 후보 목록을 담습니다.
+ */
 @Getter
 @Setter
 @NoArgsConstructor

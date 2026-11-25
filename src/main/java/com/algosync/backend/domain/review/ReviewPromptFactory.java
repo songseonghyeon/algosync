@@ -3,9 +3,13 @@ package com.algosync.backend.domain.review;
 import com.algosync.backend.domain.submission.dto.SubmissionDto;
 import org.springframework.stereotype.Component;
 
+/**
+ * 이전 제출의 유무에 따라 단일 코드 리뷰 또는 비교 리뷰 프롬프트를 구성합니다.
+ */
 @Component
 public class ReviewPromptFactory {
 
+    // 이전 코드가 비어 있으면 현재 제출만 평가하는 프롬프트를 선택합니다.
     public String createPrompt(SubmissionDto dto, String prevCode) {
         if (prevCode == null || prevCode.isBlank()) {
             return createBasicReviewPrompt(dto);
@@ -13,6 +17,7 @@ public class ReviewPromptFactory {
         return createCompareReviewPrompt(dto, prevCode);
     }
 
+    // 현재 제출 코드만 평가하는 프롬프트를 만듭니다.
     private String createBasicReviewPrompt(SubmissionDto dto) {
         return """
             너는 알고리즘 코드 리뷰어다.
@@ -85,6 +90,7 @@ public class ReviewPromptFactory {
             """.formatted(dto.getProblemTitle(), dto.getCode());
     }
 
+    // 이전 코드와 현재 코드의 차이를 분석하는 프롬프트를 만듭니다.
     private String createCompareReviewPrompt(SubmissionDto dto, String prevCode) {
         return """
             너는 알고리즘 코드 리뷰어다.

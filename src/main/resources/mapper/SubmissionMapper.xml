@@ -3,6 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.algosync.backend.domain.submission.SubmissionRepository">
+    <!-- 제출을 저장하고 생성된 ID를 DTO의 submissionId에 채웁니다. -->
     <insert id="insertSubmission" useGeneratedKeys="true" keyProperty="submissionId">
         INSERT INTO submissions (
         user_id,
@@ -23,14 +24,17 @@
         )
     </insert>
 
+    <!-- 문제 ID에 해당하는 제출을 조회합니다. -->
     <select id="selectSubmission">
         select * from submissions where problem_id = #{problemId}
     </select>
 
+    <!-- 해당 사용자와 문제에 일치하는 제출 코드를 조회합니다. -->
     <select id="selectMyCode">
         select code from submissions where user_id = #{userId} and problem_id = #{problemId}
     </select>
 
+    <!-- 사용자와 문제가 같은 제출 중 가장 최근 코드를 조회합니다. -->
     <select id="getPrevCode" resultType="string">
         SELECT code
         FROM submissions

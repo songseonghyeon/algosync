@@ -2,8 +2,9 @@ package com.algosync.backend.domain.submission;
 
 import com.algosync.backend.common.exception.ReviewJobNotFoundException;
 import com.algosync.backend.common.exception.SubmissionProcessingException;
+import com.algosync.backend.domain.problem.ProblemJpaRepository;
 import com.algosync.backend.domain.problem.ProblemRepository;
-import com.algosync.backend.domain.problem.dto.ProblemDto;
+import com.algosync.backend.domain.problem.entity.ProblemEntity;
 import com.algosync.backend.domain.review.ReviewAsyncService;
 import com.algosync.backend.domain.review.ReviewService;
 import com.algosync.backend.domain.review.dto.ReviewJobResponseDto;
@@ -24,6 +25,7 @@ import org.springframework.stereotype.Service;
 public class SubmissionService {
     private final SubmissionRepository subRepo;
     private final ProblemRepository problemRepo;
+    private final ProblemJpaRepository problemJpaRepo;
     private final ReviewService reviewService;
     private final ReviewAsyncService reviewAsyncService;
     private final UserService userService;
@@ -73,17 +75,18 @@ public class SubmissionService {
             prevCode = subRepo.getPrevCode(dto.getUserId(), dto.getProblemId());
         }
 
-        ProblemDto problemDto = new ProblemDto();
-        problemDto.setProblemId(dto.getProblemId());
-        problemDto.setTitle(dto.getProblemTitle());
-        problemDto.setLevel(dto.getLevel());
-        problemDto.setCategory(dto.getCategory());
-        problemDto.setProblemId(dto.getProblemId());
+        ProblemEntity problemEntity = new ProblemEntity();
+        problemEntity.setProblemId(dto.getProblemId());
+        problemEntity.setTitle(dto.getProblemTitle());
+        problemEntity.setLevel(dto.getLevel());
+        problemEntity.setCategory(dto.getCategory());
 
-        String existingTitle = problemRepo.selectTitle(problemDto.getProblemId());
-        if (existingTitle == null) {
-            log.info("DB에서 문제를 찾을 수 없습니다. Insert problem metadata. problemId={}", problemDto.getProblemId());
-            problemRepo.insertProblem(problemDto);
+
+
+        String title = problemJpaRepo.findById(dto.getProblemId()).map(problem -> problem.getTitle()).orElse(null);
+        if (title == null) {
+            log.info("DB에서 문제를 찾을 수 없습니다. Insert problem metadata. problemId={}", dto.getProblemId());
+            problemJpaRepo.save(problemEntity);
         }
 
         return prevCode;

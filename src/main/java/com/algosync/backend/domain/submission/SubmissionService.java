@@ -11,7 +11,9 @@ import com.algosync.backend.domain.review.dto.ReviewJobResponseDto;
 import com.algosync.backend.domain.review.dto.ReviewResponseDto;
 import com.algosync.backend.domain.submission.dto.SubmissionDto;
 import com.algosync.backend.domain.users.dto.UserDto;
-import com.algosync.backend.domain.users.dto.UserService;
+import com.algosync.backend.domain.users.UserService;
+import com.algosync.backend.domain.users.entity.UserEntity;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -63,8 +65,8 @@ public class SubmissionService {
     // 미등록 사용자와 문제를 저장하고 비교에 사용할 이전 코드를 찾습니다.
     private String prepareSubmission(SubmissionDto dto) {
         if (dto.getUserId() != null) {
-            UserDto userDto = userService.selectOneUser(dto.getUserId());
-            if (userDto == null) {
+            UserEntity userEntity = userService.selectOneUser(dto.getUserId());
+            if(userEntity == null) {
                 userService.insertUserId(dto.getUserId());
             }
         }
@@ -81,10 +83,7 @@ public class SubmissionService {
         problemEntity.setLevel(dto.getLevel());
         problemEntity.setCategory(dto.getCategory());
 
-
-
-        String title = problemJpaRepo.findById(dto.getProblemId()).map(problem -> problem.getTitle()).orElse(null);
-        if (title == null) {
+        if (!problemJpaRepo.existsById(dto.getProblemId())) {
             log.info("DB에서 문제를 찾을 수 없습니다. Insert problem metadata. problemId={}", dto.getProblemId());
             problemJpaRepo.save(problemEntity);
         }

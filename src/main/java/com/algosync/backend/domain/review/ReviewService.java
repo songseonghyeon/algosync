@@ -1,6 +1,7 @@
 package com.algosync.backend.domain.review;
 
 import com.algosync.backend.domain.review.dto.ReviewResponseDto;
+import com.algosync.backend.domain.review.entity.ReviewEntity;
 import com.algosync.backend.domain.submission.dto.SubmissionDto;
 import com.algosync.backend.global.exception.ExternalApiException;
 import lombok.RequiredArgsConstructor;
@@ -16,12 +17,22 @@ import org.springframework.stereotype.Service;
 public class ReviewService {
     private final GeminiService geminiService;
     private final NvidiaService nvidiaService;
-    private final ReviewRepository reviewRepository;
+    private final ReviewJpaRepository reviewJpaRepository;
+
+    ReviewEntity changeEntity(Long submissionId, ReviewResponseDto reviewResponseDto) {
+        ReviewEntity reviewEntity = new ReviewEntity();
+        reviewEntity.setSubmissionId(submissionId);
+        reviewEntity.setTimeComplexity(reviewResponseDto.getTimeComplexity());
+        reviewEntity.setSpaceComplexity(reviewResponseDto.getSpaceComplexity());
+        reviewEntity.setFeedback(reviewResponseDto.getFeedback());
+        reviewEntity.setScore(Integer.parseInt(reviewResponseDto.getScore()));
+        return reviewEntity;
+    }
 
     public ReviewResponseDto requestReview(Long submissionId, SubmissionDto dto, String prevCode) {
         try {
             ReviewResponseDto review = geminiService.requestReview(dto, prevCode);
-            reviewRepository.insertReview(submissionId, review);
+            reviewJpaRepository.save(changeEntity(submissionId, review));
             return review;
         } catch (ExternalApiException e) {
             // Gemini가 일시적으로 응답할 수 없는 경우에만 NVIDIA로 재시도합니다.
@@ -31,7 +42,7 @@ public class ReviewService {
 
             log.warn("Gemini unavailable. Falling back to NVIDIA.");
             ReviewResponseDto review = nvidiaService.requestReview(dto, prevCode);
-            reviewRepository.insertReview(submissionId, review);
+            reviewJpaRepository.save(changeEntity(submissionId, review));
             return review;
         }
     }

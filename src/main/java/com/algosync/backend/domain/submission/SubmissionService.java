@@ -10,6 +10,7 @@ import com.algosync.backend.domain.review.ReviewService;
 import com.algosync.backend.domain.review.dto.ReviewJobResponseDto;
 import com.algosync.backend.domain.review.dto.ReviewResponseDto;
 import com.algosync.backend.domain.submission.dto.SubmissionDto;
+import com.algosync.backend.domain.submission.entity.SubmissionEntity;
 import com.algosync.backend.domain.users.dto.UserDto;
 import com.algosync.backend.domain.users.UserService;
 import com.algosync.backend.domain.users.entity.UserEntity;
@@ -25,17 +26,30 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @RequiredArgsConstructor
 public class SubmissionService {
-    private final SubmissionRepository subRepo;
-    private final ProblemRepository problemRepo;
+    private final SubmissionJpaRepository  subJpaRepo;
     private final ProblemJpaRepository problemJpaRepo;
     private final ReviewService reviewService;
     private final ReviewAsyncService reviewAsyncService;
     private final UserService userService;
 
+    private void saveSubmission(SubmissionDto dto) {
+        SubmissionEntity submission = new SubmissionEntity();
+        submission.setUserId(dto.getUserId());
+        submission.setProblemId(dto.getProblemId());
+        submission.setLanguage(dto.getLanguage());
+        submission.setCode(dto.getCode());
+        submission.setSolveTime(dto.getSolveTime());
+        submission.setSuccess(dto.isSuccess());
+
+        SubmissionEntity saved = subJpaRepo.save(submission);
+        dto.setSubmissionId(saved.getSubmissionId());
+    }
+
+
     // 제출을 저장하고 AI 리뷰가 완료될 때까지 요청을 처리합니다.
     public ReviewResponseDto insertSubmission(SubmissionDto dto) {
         String prevCode = prepareSubmission(dto);
-        subRepo.insertSubmission(dto);
+        saveSubmission(dto);
         ReviewResponseDto review = reviewService.requestReview(dto.getSubmissionId(), dto, prevCode);
         if (review == null) {
             throw new SubmissionProcessingException("AI 리뷰 생성에 실패했습니다.");
@@ -46,7 +60,7 @@ public class SubmissionService {
     // 제출을 저장한 뒤 백그라운드 리뷰를 시작하고 조회 토큰을 반환합니다.
     public ReviewJobResponseDto insertSubmissionAsync(SubmissionDto dto) {
         String prevCode = prepareSubmission(dto);
-        subRepo.insertSubmission(dto);
+        saveSubmission(dto);
 
         ReviewJobResponseDto pending = reviewAsyncService.createPendingJob(dto.getSubmissionId());
         reviewAsyncService.requestReviewAsync(pending.getReviewToken(), dto.getSubmissionId(), dto, prevCode);
@@ -73,8 +87,11 @@ public class SubmissionService {
 
         // 새 제출을 저장하기 전에 조회해야 이전 제출 코드를 가져올 수 있습니다.
         String prevCode = null;
+
         if (dto.getUserId() != null && dto.getProblemId() != null) {
-            prevCode = subRepo.getPrevCode(dto.getUserId(), dto.getProblemId());
+            prevCode = subJpaRepo.findFirstByUserIdAndProblemIdOrderByCreatedAtDescSubmissionIdDesc(dto.getUserId(), dto.getProblemId())
+                    .map((SubmissionEntity::getCode))
+                    .orElse(null);
         }
 
         ProblemEntity problemEntity = new ProblemEntity();
